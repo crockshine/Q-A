@@ -2,6 +2,8 @@
 import {onMounted, ref} from 'vue'
 import axios from 'axios'
 import {useRoute , useRouter} from "vue-router";
+import {useUsersStore} from "../stores/UsersStore.ts";
+const useStore = useUsersStore()
 
 const route = useRoute();
 const router = useRouter();
@@ -24,7 +26,7 @@ const addNewTest = async () => {
 
   localStorage.setItem('userTests', JSON.stringify(allDataFromLS.value))
 
-  await axios.patch('https://9cf2a645b071fb84.mokky.dev/users/1',{
+  await axios.patch(`https://9cf2a645b071fb84.mokky.dev/users/${useStore.userId}`,{
     tests:[ ...allDataFromLS.value ]
   })
 

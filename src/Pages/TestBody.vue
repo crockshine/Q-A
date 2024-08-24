@@ -27,12 +27,15 @@ const isNetwork = ref<boolean>(true)
 onMounted(async () => {
   try {
     const {data}: AxiosResponse<userInfo[]> = await axios.get(`https://9cf2a645b071fb84.mokky.dev/users?userName=${document.cookie.split('=')[1]}`)
-
-    data[0].tests ? userTests.value = data[0].tests : userTests.value = []
-    usersStore.setUserId(data[0].id)
-    usersStore.setUserName(data[0].userName)
-    usersStore.setUserPass(data[0].userPass)
-    localStorage.setItem('userTests', JSON.stringify(userTests.value))
+    if(data[0]){
+      userTests.value = data[0].tests
+      usersStore.setUserId(data[0].id)
+      usersStore.setUserName(data[0].userName)
+      usersStore.setUserPass(data[0].userPass)
+      localStorage.setItem('userTests', JSON.stringify(userTests.value))
+    }else{
+      userTests.value = []
+    }
   } catch (err) {
     console.log(err);
     isNetwork.value = false

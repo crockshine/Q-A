@@ -49,19 +49,21 @@ const submitForm = async () => {
 
  try {
       const {data}:AxiosResponse<userDataObj[]> = await axios.get('https://9cf2a645b071fb84.mokky.dev/users');
-      console.log(data)
-      if(data.find(el => el.userName === inputDataName.value)){
-        errorMsg.value='Имя пользователя занято'
+      //console.log(data)
+      if(data.find(el => el.userPass === inputDataPassword.value)){
+        errorMsg.value='Пароль не надежный. Измените'
         inputCool.value = false;
       }else {
-        await axios.post('https://9cf2a645b071fb84.mokky.dev/users',
-            {
-              userName:inputDataName.value,
-              userPass:inputDataPassword.value
-            });
+        if(typeof inputDataName.value === 'string') {
+          await axios.post('https://9cf2a645b071fb84.mokky.dev/users',
+              {
+                userName: inputDataName.value.trim(),
+                userPass: inputDataPassword.value
+              });
+          document.cookie = `username=${inputDataName.value}; expires=Thu, 18 Dec 2025 12:00:00 UTC; path=/`;
+          await router.push({name: 'Home' });
+        }
 
-        document.cookie = `username=${inputDataName.value}; expires=Thu, 18 Dec 2025 12:00:00 UTC; path=/`;
-        await router.push({name: 'Home' });
       }
  }catch (err){
    console.log(err)
